@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CompanyGenius",
   "version": "1.0.0",
-  "description": "AI-powered company name prediction with smart learning. Get genius-level predictions that improve with every correction.",
+  "description": "実務で良く確認する前株、後株などの正式社名の確認を、法人番号データベースからの照合と推定で支援するChrome拡張機能",
   "permissions": [
     "storage",
     "activeTab",

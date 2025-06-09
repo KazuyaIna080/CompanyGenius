@@ -1,8 +1,8 @@
 # 🧠 CompanyGenius
 
-**AI-powered company name prediction with smart learning**
+**実務で良く確認する前株、後株などの正式社名確認支援ツール**
 
-CompanyGenius is an intelligent Chrome extension that provides genius-level company name predictions, getting smarter with every correction you make.
+実務で良く確認する前株、後株などの正式社名の確認を、法人番号データベースからの照合と、存在しない企業については推定を提示し、間違っていた場合含めてローカルに保存出来るChrome拡張機能です。
 
 ## ✨ Features
 
