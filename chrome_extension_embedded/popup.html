@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyGenius Embedded</title>
+    <style>
+        body {
+            width: 400px;
+            min-height: 300px;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .header .subtitle {
+            margin: 4px 0 0 0;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .search-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .input-group {
+            margin-bottom: 12px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        .predict-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .predict-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .predict-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .result-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        
+        .result-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        
+        .result-details {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+        
+        .result-details div {
+            margin-bottom: 4px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .correct-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .correct-btn:hover {
+            background: #ff5252;
+        }
+        
+        .accept-btn {
+            background: #51cf66;
+            color: white;
+        }
+        
+        .accept-btn:hover {
+            background: #40c057;
+        }
+        
+        .stats-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔗 CompanyGenius</h1>
+        <p class="subtitle">データベース内蔵版 - セットアップ不要</p>
+    </div>
+    
+    <div class="search-section">
+        <div class="input-group">
+            <label for="companyInput">企業名を入力</label>
+            <input type="text" id="companyInput" placeholder="例: トヨタ、ソニー、任天堂">
+        </div>
+        <button id="predictBtn" class="predict-btn">🔍 企業名を予測</button>
+    </div>
+    
+    <div id="resultSection" class="result-section">
+        <div class="result-header">
+            <span id="resultIcon">🏢</span>
+            <span>予測結果</span>
+        </div>
+        <div id="companyName" class="company-name"></div>
+        <div id="resultDetails" class="result-details"></div>
+        <div class="action-buttons">
+            <button id="correctBtn" class="action-btn correct-btn">❌ 間違い</button>
+            <button id="acceptBtn" class="action-btn accept-btn">✅ 正解</button>
+        </div>
+    </div>
+    
+    <div id="errorSection" class="error" style="display: none;"></div>
+    
+    <div id="loadingSection" class="loading" style="display: none;">
+        🔄 予測中...
+    </div>
+    
+    <div class="stats-section">
+        <div class="stats-row">
+            <span>📊 企業データ:</span>
+            <span id="totalCompanies">-</span>
+        </div>
+        <div class="stats-row">
+            <span>🧠 学習済み:</span>
+            <span id="userCorrections">-</span>
+        </div>
+        <div class="stats-row">
+            <span>💾 データベース:</span>
+            <span id="databaseType">-</span>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
