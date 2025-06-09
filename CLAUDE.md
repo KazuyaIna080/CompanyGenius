@@ -44,6 +44,26 @@ When starting any new project:
 4. Reference implementation examples for proven patterns
 5. Maintain systematic progress records throughout development
 
+### GitHub Security & Compliance Rules
+
+**MANDATORY for ALL GitHub public projects:**
+
+Before any commit to public repositories, MUST complete:
+
+1. **Security Check (GITHUB_SECURITY_RULES.md)**:
+   - Remove ALL API keys, personal info, real logs, test data
+   - Verify no sensitive information in code, comments, or files
+   - Implement environment variable configuration
+   - Add appropriate .gitignore and security documentation
+
+2. **Compliance Check**:
+   - Verify commercial use compatibility for all data sources
+   - Add required attributions and source citations
+   - Confirm license compatibility
+   - Document data source usage in README.md
+
+**Zero tolerance policy**: No exceptions for security and compliance violations.
+
 ### MCP Integration
 
 Optimized for Claude Desktop with recommended MCP extensions:
