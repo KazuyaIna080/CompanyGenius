@@ -110,13 +110,32 @@ python phase15_fixed_api.py
 
 **📖 詳細手順**: [INSTALLATION_COMPLETE_GUIDE.md](INSTALLATION_COMPLETE_GUIDE.md) を参照
 
-### 🪶 軽量版（EDINET Edition）- 計画中
+### 🪶 軽量版（EDINET Edition）
 
-⚡ **3分セットアップ**で即座利用開始できる軽量版を開発予定
+⚡ **3ステップセットアップ**で即座利用開始できる軽量版
 
-- **データ規模**: EDINET上場企業約4,000社（10-20MB）
-- **セットアップ**: 巨大CSVダウンロード不要
-- **カバー率**: 実務で重要な企業90%+
+#### 軽量版セットアップ手順
+
+```bash
+# Step 1: EDINETコードリストダウンロード
+# https://disclosure2.edinet-fsa.go.jp/weee0010.aspx
+# 「EDINETコードリスト」をダウンロードしてプロジェクトディレクトリに配置
+
+# Step 2: Lite版データベース作成
+python create_database_lite.py
+# → ./data/corporate_lite.db が作成される（約5-10MB）
+
+# Step 3: Lite版APIサーバー起動  
+python phase15_lite_api.py  # ポート8002で起動
+# Chrome拡張機能をインストール（既存のものを使用）
+```
+
+#### 軽量版の特徴
+
+- **データ規模**: EDINETコードリスト約4,000社（5-10MB）
+- **セットアップ**: 3.5GB CSVダウンロード不要
+- **カバー率**: 上場企業・主要企業 90%+
+- **機能**: ユーザー学習機能をそのまま維持
 - **対象**: 営業・投資・報告書作成での企業名確認
 
 詳細：[LIGHTWEIGHT_VERSION_PLAN.md](LIGHTWEIGHT_VERSION_PLAN.md)

@@ -34,89 +34,188 @@ EDINET上場企業データ（約4,000社）のみを使用し、即座にセッ
 
 ### データ取得・処理
 
+**データソース**: https://disclosure2.edinet-fsa.go.jp/weee0010.aspx  
+**ファイル**: EDINETコードリスト（CSVファイル）
+
 ```python
-# lightweight_edinet_builder.py
-import requests
-import json
+# create_database_lite.py
+import csv
 import sqlite3
+import os
 from datetime import datetime
 
-class EDINETLightweightBuilder:
-    """EDINET軽量版データベース作成"""
+class CompanyGeniusLiteBuilder:
+    """CompanyGenius Lite データベース作成（EDINETコードリスト版）"""
     
     def __init__(self):
-        self.api_key = "YOUR_EDINET_API_KEY"  # 要取得
-        self.db_path = "./data/corporate_lightweight.db"
+        self.db_path = "./data/corporate_lite.db"
+        self.csv_file = None
         self.companies = []
     
-    def fetch_listed_companies(self):
-        """EDINET APIから上場企業リストを取得"""
-        url = "https://disclosure2dl.edinet-fsa.go.jp/api/v2/documents.json"
+    def find_edinet_csv(self):
+        """EDINETコードリストCSVファイルを検索"""
+        # 一般的なファイル名パターン
+        patterns = [
+            "EdinetcodeDlInfo.csv",
+            "edinet_code_list.csv", 
+            "edinetcode*.csv",
+            "*edinet*.csv"
+        ]
         
-        # 過去1年の有価証券報告書を取得
-        params = {
-            'date': '2025-01-01',
-            'type': '2',  # 有価証券報告書
-            'Subscription-Key': self.api_key
-        }
+        for pattern in patterns:
+            files = glob.glob(pattern)
+            if files:
+                self.csv_file = files[0]
+                print(f"📁 EDINETコードリストCSV: {self.csv_file}")
+                return True
         
-        response = requests.get(url, params=params)
-        data = response.json()
-        
-        # 企業情報を抽出・正規化
-        for doc in data.get('results', []):
-            company_info = {
-                'edinet_code': doc.get('edinetCode'),
-                'company_name': doc.get('filerName'),
-                'company_name_en': doc.get('filerNameEn'),
-                'securities_code': doc.get('secCode'),
-                'jcn': doc.get('JCN'),  # 法人番号
-                'submit_date': doc.get('submitDateTime'),
-                'business_category': self._extract_business_category(doc),
-                'market_section': self._extract_market_section(doc)
-            }
-            self.companies.append(company_info)
+        print("❌ EDINETコードリストCSVが見つかりません")
+        print("📥 以下からダウンロードしてください:")
+        print("   https://disclosure2.edinet-fsa.go.jp/weee0010.aspx")
+        print("   → 「EDINETコードリスト」をダウンロード")
+        return False
     
-    def create_lightweight_database(self):
-        """軽量版データベース作成"""
+    def process_edinet_csv(self):
+        """EDINETコードリストCSVを処理"""
+        if not self.csv_file:
+            return False
+        
+        print("📊 EDINETコードリスト処理中...")
+        
+        with open(self.csv_file, 'r', encoding='cp932') as f:  # EDINETはShift_JIS
+            reader = csv.DictReader(f)
+            
+            for row in reader:
+                # EDINETコードリストの標準フィールド
+                company_info = {
+                    'edinet_code': row.get('ＥＤＩＮＥＴコード', ''),
+                    'type': row.get('種別', ''),
+                    'listing_classification': row.get('上場区分', ''),
+                    'consolidated_classification': row.get('連結の有無', ''),
+                    'capital': row.get('資本金', ''),
+                    'settlement_date': row.get('決算日', ''),
+                    'submitter_name': row.get('提出者名', ''),
+                    'submitter_name_en': row.get('提出者名（英字）', ''),
+                    'submitter_name_kana': row.get('提出者名（ヨミ）', ''),
+                    'location': row.get('所在地', ''),
+                    'submitter_industry': row.get('提出者業種', ''),
+                    'securities_code': row.get('証券コード', ''),
+                    'submitter_corporate_number': row.get('提出者法人番号', '')
+                }
+                
+                # 有効な企業データのみ追加
+                if company_info['submitter_name'] and company_info['edinet_code']:
+                    self.companies.append(company_info)
+        
+        print(f"✅ 処理完了: {len(self.companies)} 社")
+        return True
+    
+    def create_lite_database(self):
+        """CompanyGenius Lite データベース作成"""
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # 軽量版テーブル作成
+        # CompanyGenius Lite テーブル作成
         cursor.execute('''
             CREATE TABLE companies_lite (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 edinet_code TEXT UNIQUE,
                 company_name TEXT,
                 company_name_en TEXT,
+                company_name_kana TEXT,
                 securities_code TEXT,
-                jcn TEXT,
-                business_category TEXT,
-                market_section TEXT,
+                corporate_number TEXT,
+                listing_classification TEXT,
+                capital TEXT,
+                location TEXT,
+                industry TEXT,
+                settlement_date TEXT,
                 last_updated TEXT
+            )
+        ''')
+        
+        # ユーザー修正データテーブル（フル版と共通）
+        cursor.execute('''
+            CREATE TABLE user_corrections (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                original_query TEXT,
+                predicted_name TEXT,
+                correct_name TEXT,
+                correction_date TEXT,
+                confidence REAL DEFAULT 1.0
             )
         ''')
         
         # データ挿入
         for company in self.companies:
             cursor.execute('''
-                INSERT OR REPLACE INTO companies_lite 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT OR REPLACE INTO companies_lite VALUES 
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                None, company['edinet_code'], company['company_name'],
-                company['company_name_en'], company['securities_code'],
-                company['jcn'], company['business_category'],
-                company['market_section'], datetime.now().isoformat()
+                None,
+                company['edinet_code'],
+                company['submitter_name'],
+                company['submitter_name_en'],
+                company['submitter_name_kana'],
+                company['securities_code'],
+                company['submitter_corporate_number'],
+                company['listing_classification'],
+                company['capital'],
+                company['location'],
+                company['submitter_industry'],
+                company['settlement_date'],
+                datetime.now().isoformat()
             ))
         
         # 検索用インデックス
         cursor.execute('CREATE INDEX idx_lite_name ON companies_lite(company_name)')
-        cursor.execute('CREATE INDEX idx_lite_code ON companies_lite(securities_code)')
+        cursor.execute('CREATE INDEX idx_lite_kana ON companies_lite(company_name_kana)')
+        cursor.execute('CREATE INDEX idx_lite_securities ON companies_lite(securities_code)')
+        cursor.execute('CREATE INDEX idx_lite_edinet ON companies_lite(edinet_code)')
+        
+        # ユーザー修正データ用インデックス
+        cursor.execute('CREATE INDEX idx_corrections_query ON user_corrections(original_query)')
         
         conn.commit()
         conn.close()
         
-        print(f"✅ 軽量版DB作成完了: {len(self.companies)} 社")
+        db_size = os.path.getsize(self.db_path) / (1024 * 1024)  # MB
+        print(f"✅ CompanyGenius Lite DB作成完了")
+        print(f"📁 ファイル: {self.db_path}")
+        print(f"📊 企業数: {len(self.companies)} 社")
+        print(f"💾 サイズ: {db_size:.1f} MB")
+        
+        return True
+
+def main():
+    """CompanyGenius Lite データベース作成メイン"""
+    print("🪶 CompanyGenius Lite データベース作成")
+    print("=" * 50)
+    
+    builder = CompanyGeniusLiteBuilder()
+    
+    # 1. EDINETコードリストCSVファイル検索
+    if not builder.find_edinet_csv():
+        return False
+    
+    # 2. CSVファイル処理
+    if not builder.process_edinet_csv():
+        return False
+    
+    # 3. データベース作成
+    if not builder.create_lite_database():
+        return False
+    
+    print("\n🚀 CompanyGenius Lite セットアップ完了！")
+    print("   python phase15_lite_api.py でAPIサーバーを起動できます")
+    
+    return True
+
+if __name__ == "__main__":
+    import glob
+    main()
 ```
 
 ### 軽量版APIサーバー
@@ -139,11 +238,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class LightweightPredictor:
-    """軽量版予測システム"""
+class CompanyGeniusLitePredictor:
+    """CompanyGenius Lite 予測システム（ユーザー学習機能付き）"""
     
     def __init__(self):
-        self.db_path = "./data/corporate_lightweight.db"
+        self.db_path = "./data/corporate_lite.db"
+        self.user_corrections = {}
+        self._load_user_corrections()
     
     def predict(self, query: str):
         """軽量版企業名予測"""
@@ -247,20 +348,42 @@ if __name__ == "__main__":
 
 ## 📦 配布戦略
 
-### 軽量版パッケージ構成
+### CompanyGenius Lite パッケージ構成
 
 ```
 CompanyGenius-Lite/
 ├── data/
-│   └── corporate_lightweight.db     # 10-20MB（事前構築済み）
-├── chrome_extension_lite/          # 軽量版専用拡張機能
+│   └── corporate_lite.db           # 5-10MB（事前構築済み）
+├── chrome_extension/               # 既存拡張機能（設定変更のみ）
 │   ├── manifest.json              # ポート8002に変更
 │   ├── background.js
 │   └── popup.html
-├── phase15_lightweight_api.py      # 軽量版APIサーバー
-├── requirements_lite.txt           # 最小依存関係
-├── QUICK_START_LITE.md            # 3分セットアップガイド
-└── README_LITE.md                 # 軽量版説明
+├── create_database_lite.py         # EDINETコードリストからDB作成
+├── phase15_lite_api.py            # Lite版APIサーバー
+├── requirements.txt               # 既存の依存関係
+├── SETUP_LITE.md                  # 3ステップセットアップガイド
+└── README_LITE.md                 # Lite版説明
+```
+
+### 3ステップセットアップ
+
+**Step 1: EDINETコードリストダウンロード**
+```bash
+# 1. https://disclosure2.edinet-fsa.go.jp/weee0010.aspx にアクセス
+# 2. 「EDINETコードリスト」をダウンロード
+# 3. プロジェクトディレクトリに配置
+```
+
+**Step 2: データベース作成**
+```bash
+python create_database_lite.py
+# → ./data/corporate_lite.db が作成される（約5-10MB）
+```
+
+**Step 3: 起動**
+```bash
+python phase15_lite_api.py  # ポート8002で起動
+# Chrome拡張機能をインストール（既存のものを使用）
 ```
 
 ### 配布方法
