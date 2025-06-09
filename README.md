@@ -61,6 +61,55 @@ cp .mcp.json.template .mcp.json
 
 ---
 
+## ⚡ クイックスタート
+
+### 📥 ダウンロード・基本セットアップ
+
+```bash
+# 1. プロジェクトダウンロード
+git clone https://github.com/KazuyaIna080/CompanyGenius.git
+cd CompanyGenius
+
+# 2. Python依存パッケージインストール
+pip install -r requirements.txt
+
+# 3. データディレクトリ作成
+mkdir -p data
+```
+
+### 📊 データベースセットアップ（重要）
+
+⚠️ **データベースファイルは別途ダウンロード・作成が必要です**
+
+```bash
+# 1. 法人番号データベースダウンロード
+# https://www.houjin-bangou.nta.go.jp/download/
+# → 「全件データ」をダウンロード・解凍
+
+# 2. 環境変数設定
+export DATABASE_PATH="./data/corporate_phase2_stable.db"
+
+# 3. データベース作成（CSVから）
+python create_database.py  # 詳細は INSTALLATION_COMPLETE_GUIDE.md
+```
+
+### 🚀 起動・動作確認
+
+```bash
+# 1. APIサーバー起動
+python phase15_fixed_api.py
+
+# 2. Chrome拡張機能インストール
+# chrome://extensions/ → デベロッパーモード → chrome_extension フォルダ選択
+
+# 3. 動作確認
+# Webページでテキスト選択 → 右クリック → 「CompanyGeniusで企業名を予測」
+```
+
+**📖 詳細手順**: [INSTALLATION_COMPLETE_GUIDE.md](INSTALLATION_COMPLETE_GUIDE.md) を参照
+
+---
+
 ## 🔧 6段階カスケードシステム
 
 | Level | 名称 | 精度 | 説明 |
