@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "filesystem",
+    "memory",
+    "braveSearch",
+    "sequential-thinking",
+    "everart",
+    "replicate"
+  ]
+}

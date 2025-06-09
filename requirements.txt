@@ -1,0 +1,33 @@
+# Phase 15: 6段階カスケード統合企業名予測システム - Claude Code版
+# 依存関係リスト
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Database
+sqlite3-tools==0.8.0
+
+# Data Processing
+pandas==2.1.4
+numpy==1.24.4
+
+# HTTP Requests
+requests==2.31.0
+
+# Security
+python-multipart==0.0.6
+
+# Logging & Utilities
+python-json-logger==2.0.8
+
+# Optional: Machine Learning (for future enhancements)
+# scikit-learn==1.3.2
+# lightgbm==4.1.0
+
+# Development & Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# CORS Support
+python-cors==1.7.0

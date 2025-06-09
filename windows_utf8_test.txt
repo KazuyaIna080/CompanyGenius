@@ -1,0 +1,18 @@
+# Windows PC UTF-8 Test Commands
+
+# PowerShell UTF-8 Test Examples:
+# Character encoding test
+Invoke-RestMethod http://localhost:8001/charset_test
+
+# Japanese company predictions (URL-encoded)
+Invoke-RestMethod "http://localhost:8001/predict?q=%E3%83%88%E3%83%A8%E3%82%BF"  # トヨタ
+Invoke-RestMethod "http://localhost:8001/predict?q=%E3%83%A6%E3%83%8B%E3%82%AF%E3%83%AD"  # ユニクロ
+Invoke-RestMethod "http://localhost:8001/predict?q=%E3%83%9E%E3%83%83%E3%82%AF"  # マック
+Invoke-RestMethod "http://localhost:8001/predict?q=%E6%A5%BD%E5%A4%A9"  # 楽天
+
+# Health check
+Invoke-RestMethod http://localhost:8001/health
+
+# API documentation
+Start-Process "http://localhost:8001/docs"
+

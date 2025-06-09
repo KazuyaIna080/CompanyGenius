@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "CompanyGenius",
+  "version": "1.0.0",
+  "description": "AI-powered company name prediction with smart learning. Get genius-level predictions that improve with every correction.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:8001/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

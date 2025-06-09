@@ -1,0 +1,38 @@
+# Logs and temporary files
+server.log
+corrections.log
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (if any)
+node_modules/
+
+# Temporary distribution folder
+CompanyGenius_Distribution/
+
+# Personal data
+corrections_backup_*.log
+
+# MCP configuration with API keys
+.mcp.json

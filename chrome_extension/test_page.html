@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Extension Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .company-name {
+            background: #ffffcc;
+            padding: 2px 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Chrome Extension Test Page</h1>
+    
+    <div class="instructions">
+        <h2>📋 テスト手順</h2>
+        <ol>
+            <li><strong>ポップアップテスト:</strong> 拡張機能アイコンをクリックして企業名を検索</li>
+            <li><strong>右クリックテスト:</strong> 下の企業名をハイライトして右クリック → 「企業名を予測」を選択</li>
+            <li><strong>間違いボタンテスト:</strong> 予測結果の「❌ 間違い」ボタンをクリック</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🏢 テスト用企業名</h2>
+        <p>以下の企業名を選択して右クリックメニューでテストしてください：</p>
+        
+        <ul>
+            <li>大手IT企業: <span class="company-name">トヨタ</span> / <span class="company-name">ソニー</span> / <span class="company-name">ソフトバンク</span></li>
+            <li>通信会社: <span class="company-name">ドコモ</span> / <span class="company-name">au</span> / <span class="company-name">楽天</span></li>
+            <li>小売・飲食: <span class="company-name">ユニクロ</span> / <span class="company-name">マック</span> / <span class="company-name">スタバ</span></li>
+            <li>金融機関: <span class="company-name">三菱UFJ</span> / <span class="company-name">みずほ</span> / <span class="company-name">三井住友</span></li>
+            <li>エンタメ: <span class="company-name">任天堂</span> / <span class="company-name">カプコン</span> / <span class="company-name">バンナム</span></li>
+            <li>テスト用: <span class="company-name">ドコモ・テクノロジ</span> / <span class="company-name">架空商事</span></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 期待される動作</h2>
+        <ol>
+            <li><strong>右クリック</strong> → 「企業名を予測」メニューが表示される</li>
+            <li><strong>予測ダイアログ</strong>が表示され、企業名と信頼度が表示される</li>
+            <li><strong>「❌ 間違い」ボタン</strong>をクリック</li>
+            <li><strong>修正ダイアログ</strong>が表示され、正しい企業名を入力できる</li>
+            <li><strong>「✅ 修正を送信」</strong>をクリックして成功メッセージが表示される</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🛠️ デバッグ情報</h2>
+        <p>問題が発生した場合：</p>
+        <ul>
+            <li><strong>F12</strong> でデベロッパーツールを開く</li>
+            <li><strong>Console</strong> タブでエラーメッセージを確認</li>
+            <li>以下のメッセージが表示されることを確認：
+                <ul>
+                    <li>"Data received - Query: [企業名] PredictedName: [予測結果]"</li>
+                    <li>"Right-click data from button: [企業名] [予測結果]"</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 学習機能テスト</h2>
+        <p>修正機能をテストする手順：</p>
+        <ol>
+            <li>「<span class="company-name">ドコモ・テクノロジ</span>」を右クリックで予測</li>
+            <li>予測結果（例：「株式会社ドコモ・テクノロジ」）の「❌ 間違い」をクリック</li>
+            <li>正しい企業名を入力（例：「株式会社NTTドコモ・テクノロジ」）</li>
+            <li>「✅ 修正を送信」をクリック</li>
+            <li>もう一度同じ企業名で予測して、学習結果が反映されているか確認</li>
+        </ol>
+    </div>
+
+    <script>
+        // テストページ用のスクリプト
+        console.log('Chrome Extension Test Page loaded');
+        
+        // 企業名をクリックした時のハイライト効果
+        document.querySelectorAll('.company-name').forEach(function(element) {
+            element.addEventListener('click', function() {
+                this.style.background = '#ffcc99';
+                setTimeout(() => {
+                    this.style.background = '#ffffcc';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

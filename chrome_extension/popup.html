@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #status {
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        #result {
+            margin-top: 15px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 CompanyGenius</h1>
+    
+    <div id="status">接続確認中...</div>
+    
+    <input type="text" id="searchInput" placeholder="企業名を入力してAI予測 (例: トヨタ)" />
+    
+    <button id="predictBtn">予測実行</button>
+    
+    <button id="viewCorrectionsBtn" style="background: #FF9800; font-size: 12px; padding: 6px;">保存された修正を確認</button>
+    
+    <div id="result"></div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
