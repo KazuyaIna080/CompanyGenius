@@ -37,7 +37,7 @@ class Phase15SystemTester:
         }
         
         self.api_url = "http://127.0.0.1:8000"
-        self.db_path = "/mnt/c/Users/kazin/Desktop/corporate_phase2_stable.db"
+        self.db_path = os.getenv('DATABASE_PATH', './data/corporate_phase2_stable.db')
         
     def log_test(self, test_name, success, details=None):
         """テスト結果ログ"""
@@ -279,7 +279,7 @@ class Phase15SystemTester:
     def test_chrome_extension_files(self):
         """Chrome拡張機能ファイルテスト"""
         try:
-            extension_dir = "/home/kazin/claude_code/chrome_extension"
+            extension_dir = os.path.join(os.path.dirname(__file__), "chrome_extension")
             required_files = [
                 "manifest.json",
                 "background.js", 
@@ -413,7 +413,7 @@ class Phase15SystemTester:
 
     def save_test_report(self):
         """テストレポート保存"""
-        report_file = f"/home/kazin/claude_code/test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        report_file = f"./test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         
         try:
             with open(report_file, 'w', encoding='utf-8') as f:

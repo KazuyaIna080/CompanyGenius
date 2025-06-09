@@ -15,8 +15,8 @@ class SimpleCascadeSystem:
     """簡易カスケードシステム（pandas不要）"""
     
     def __init__(self):
-        # Linux環境でのデータベースパス
-        self.db_path = "/mnt/c/Users/kazin/Desktop/corporate_phase2_stable.db"
+        # データベースパス（環境変数から取得、デフォルトは相対パス）
+        self.db_path = os.getenv('DATABASE_PATH', './data/corporate_phase2_stable.db')
         self.performance_stats = {
             'level2_edinet_listed': 0,
             'level4_corporate_number': 0,

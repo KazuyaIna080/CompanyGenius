@@ -4,7 +4,8 @@
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(curl:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "mcp__filesystem__read_file"
     ]
   },
   "enabledMcpjsonServers": [

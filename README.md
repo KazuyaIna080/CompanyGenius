@@ -25,10 +25,41 @@ claude_code/
 │   ├── popup.html
 │   └── popup.js
 ├── requirements.txt                  # Python依存関係
-├── .mcp.json                        # MCP設定
+├── .mcp.json.template               # MCP設定テンプレート
+├── SECURITY_SETUP.md                # セキュリティ設定ガイド
 ├── CLAUDE.md                        # Claude Code設定
 └── README.md                        # このファイル
 ```
+
+## 🔒 セキュリティ設定
+
+### 🚨 初回セットアップ（必須）
+
+プロジェクト実行前に必ず以下を設定してください：
+
+```bash
+# 1. 環境変数の設定
+export DATABASE_PATH="./data/corporate_phase2_stable.db"
+export BRAVE_API_KEY="your_brave_api_key"
+export EVERART_API_KEY="your_everart_api_key" 
+export REPLICATE_API_TOKEN="your_replicate_token"
+
+# 2. MCP設定ファイルの作成
+cp .mcp.json.template .mcp.json
+# .mcp.json を編集してAPIキーを設定
+```
+
+### 📋 APIキー取得方法
+
+- **Brave Search**: https://api.search.brave.com/
+- **EverArt**: https://everart.ai/api
+- **Replicate**: https://replicate.com/account/api-tokens
+
+**⚠️ 重要**: `.mcp.json` ファイルは絶対にGitにコミットしないでください
+
+詳細は [SECURITY_SETUP.md](SECURITY_SETUP.md) を参照してください。
+
+---
 
 ## 🔧 6段階カスケードシステム
 

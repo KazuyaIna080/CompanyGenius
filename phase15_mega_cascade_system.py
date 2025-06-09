@@ -16,8 +16,8 @@ class MegaScaleCascadeSystem:
     """352万社基盤カスケードシステム"""
     
     def __init__(self):
-        # Linux環境でのデータベースパス (WSLからWindowsファイルアクセス)
-        self.db_path = "/mnt/c/Users/kazin/Desktop/corporate_phase2_stable.db"
+        # データベースパス（環境変数から取得、デフォルトは相対パス）
+        self.db_path = os.getenv('DATABASE_PATH', './data/corporate_phase2_stable.db')
         self.performance_stats = {
             'level1_user_learning': 0,
             'level2_edinet_listed': 0,

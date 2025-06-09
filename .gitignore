@@ -36,3 +36,13 @@ corrections_backup_*.log
 
 # MCP configuration with API keys
 .mcp.json
+
+# Security - Personal and sensitive data
+*.log
+corrections.log
+server.log
+debug_*.log
+
+# Personal environment data
+**/Users/kazin/**
+**/Desktop/**

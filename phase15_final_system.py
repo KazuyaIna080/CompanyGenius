@@ -15,8 +15,8 @@ class FinalCascadeSystem:
     """最終版カスケードシステム - 95%精度達成"""
     
     def __init__(self):
-        # Linux環境でのデータベースパス
-        self.db_path = "/mnt/c/Users/kazin/Desktop/corporate_phase2_stable.db"
+        # 環境変数からデータベースパスを取得（デフォルトは相対パス）
+        self.db_path = os.getenv('DATABASE_PATH', './data/corporate_phase2_stable.db')
         self.performance_stats = {
             'level1_user_learning': 0,
             'level2_edinet_listed': 0,
