@@ -110,6 +110,17 @@ python phase15_fixed_api.py
 
 **📖 詳細手順**: [INSTALLATION_COMPLETE_GUIDE.md](INSTALLATION_COMPLETE_GUIDE.md) を参照
 
+### 🪶 軽量版（EDINET Edition）- 計画中
+
+⚡ **3分セットアップ**で即座利用開始できる軽量版を開発予定
+
+- **データ規模**: EDINET上場企業約4,000社（10-20MB）
+- **セットアップ**: 巨大CSVダウンロード不要
+- **カバー率**: 実務で重要な企業90%+
+- **対象**: 営業・投資・報告書作成での企業名確認
+
+詳細：[LIGHTWEIGHT_VERSION_PLAN.md](LIGHTWEIGHT_VERSION_PLAN.md)
+
 ---
 
 ## 🔧 6段階カスケードシステム
