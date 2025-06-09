@@ -5,7 +5,8 @@
       "Bash(cat:*)",
       "Bash(curl:*)",
       "Bash(pkill:*)",
-      "mcp__filesystem__read_file"
+      "mcp__filesystem__read_file",
+      "mcp__sequential-thinking__sequentialthinking"
     ]
   },
   "enabledMcpjsonServers": [

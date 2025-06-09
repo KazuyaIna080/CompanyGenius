@@ -110,7 +110,22 @@ python phase15_fixed_api.py
 
 **📖 詳細手順**: [INSTALLATION_COMPLETE_GUIDE.md](INSTALLATION_COMPLETE_GUIDE.md) を参照
 
-### 🪶 軽量版（EDINET Edition）
+### 🔗 内蔵版（Embedded Edition）- 最推奨
+
+🚀 **Chrome Web Store ワンクリックインストール**で即座利用開始
+
+#### 革命的アプローチ
+- **データベース内蔵**: EDINETデータベース（5-10MB）をChrome拡張機能に内蔵
+- **ゼロ設定**: セットアップ・APIサーバー・ネットワーク接続不要
+- **瞬間起動**: Chrome Web Storeからインストール→即座利用開始
+- **オフライン動作**: インターネット接続不要で高速動作
+- **技術**: sql.js（WebAssembly SQLite）+ Service Worker
+
+詳細：[EMBEDDED_EDITION_PLAN.md](EMBEDDED_EDITION_PLAN.md)
+
+---
+
+### 🪶 軽量版（Lite Edition）
 
 ⚡ **3ステップセットアップ**で即座利用開始できる軽量版
 
